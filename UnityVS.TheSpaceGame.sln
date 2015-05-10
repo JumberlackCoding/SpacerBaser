@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TheSpaceGame.CSharp", "UnityVS.TheSpaceGame.CSharp.csproj", "{CF5B202C-542C-2910-5B41-B15DB480979C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TheSpaceGame.CSharp.Editor", "UnityVS.TheSpaceGame.CSharp.Editor.csproj", "{1CD25D55-56B0-4AD1-F98E-4F7A8B217083}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF5B202C-542C-2910-5B41-B15DB480979C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF5B202C-542C-2910-5B41-B15DB480979C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF5B202C-542C-2910-5B41-B15DB480979C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF5B202C-542C-2910-5B41-B15DB480979C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD25D55-56B0-4AD1-F98E-4F7A8B217083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD25D55-56B0-4AD1-F98E-4F7A8B217083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD25D55-56B0-4AD1-F98E-4F7A8B217083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD25D55-56B0-4AD1-F98E-4F7A8B217083}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

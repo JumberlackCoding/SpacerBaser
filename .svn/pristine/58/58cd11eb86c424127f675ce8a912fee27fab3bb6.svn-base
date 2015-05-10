@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ef08cce36bf3f3245b9f7ebf9dd1d006
+timeCreated: 1426300580
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - target: {instanceID: 0}
+  - BeamPreFab: {fileID: 165724, guid: 7c296d41cda1e744c85412f80d9c3700, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
