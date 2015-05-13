@@ -54,6 +54,7 @@ public class WormHeadScript : MonoBehaviour {
         //targetAsteroid = AcquireTarget();
         called = true;
         minsAte = 0;
+        gameObject.name = "WURMHEAD (Clone)";
 	}
 	
 	// Update is called once per frame

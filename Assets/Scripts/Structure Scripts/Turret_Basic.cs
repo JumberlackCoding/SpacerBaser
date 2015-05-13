@@ -37,7 +37,7 @@ public class Turret_Basic : GenericStructureScript {
                     targetLocation = target.transform.position;
                     if( needScript )
                     {
-                        if( target.name == "WURMHEAD(Clone)" )
+                        if( ( target.name == "WURMHEAD(Clone)" ) || ( target.name == "WURMHEAD (Clone)" ) )
                         {
                             targetWormScript = target.GetComponent<WormHeadScript>();
                         }

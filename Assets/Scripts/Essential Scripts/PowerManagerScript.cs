@@ -30,6 +30,11 @@ public class PowerManagerScript : MonoBehaviour {
 	public int currentMinerals;
 	public int mineralsForScore;
 	public int enemyCount;
+
+    public int SolarBatteryPowerRequest;
+    public int MinerPowerRequest;
+    public int RepairStationPowerRequest;
+    public int TurretBasicPowerRequest;
 	
 	public int currentPower;
 	public int powerRate;
@@ -273,7 +278,7 @@ public class PowerManagerScript : MonoBehaviour {
 				{
 					if( ( Batteries[battCount].shouldFunction ) && ( Batteries[battCount].storedPower < Batteries[battCount].maxStoredPower ) )
 					{
-						RequestPower( Batteries[battCount], 5 );
+						RequestPower( Batteries[battCount], SolarBatteryPowerRequest );
 						SpriteRenderer battSprite = Batteries[battCount].nodeObject.GetComponent<SpriteRenderer>();
 						if( Batteries[battCount].storedPower > 81 )
 						{
@@ -352,7 +357,7 @@ public class PowerManagerScript : MonoBehaviour {
 						{
 							if( Turrets[turretCount].storedPower < Turrets[turretCount].maxStoredPower )
 							{
-								RequestPower( Turrets[turretCount], 6 );
+								RequestPower( Turrets[turretCount], TurretBasicPowerRequest );
 							}
 						}
 					}
@@ -384,7 +389,7 @@ public class PowerManagerScript : MonoBehaviour {
 						{
 							if( RepairStations[stationCount].storedPower < RepairStations[stationCount].maxStoredPower )
 							{
-								RequestPower( RepairStations[stationCount], 6 );
+								RequestPower( RepairStations[stationCount], RepairStationPowerRequest );
 							}
 						}
 					}
@@ -420,7 +425,7 @@ public class PowerManagerScript : MonoBehaviour {
 					{
 						if( Miners[minerCount].shouldFunction )
 						{
-							RequestPower( Miners[minerCount], 2 );
+							RequestPower( Miners[minerCount], MinerPowerRequest );
 							SpriteRenderer mineSprite = Miners[minerCount].nodeObject.GetComponent<SpriteRenderer>();
 							mineSprite.color = new Color( 1f, 1f, 1f );
 							if( Miners[minerCount].storedPower >= Miners[minerCount].powerConsuming )
@@ -471,22 +476,22 @@ public class PowerManagerScript : MonoBehaviour {
 				}
 			}
 			
-			/*--------Missile Launchers--------*/
-			for( int t = 0; t < MissileLaunchers.Length; t++ )
-			{
-				MissileLaunchers[t].shouldFunction = MissileLaunchers[t].CheckIfInAnyTree();
-			}
-			if( MissileLaunchers.Length > 0 )
-			{
-				for( int launcherCount = 0; launcherCount < MissileLaunchers.Length; launcherCount++ )
-				{
-					Turret_Missile launcherScript = MissileLaunchers[launcherCount].nodeObject.GetComponent<Turret_Missile>();
-					if( MissileLaunchers[launcherCount].shouldFunction )
-					{
-						launcherScript.StructureFunction();
-					}
-				}
-			}
+            ///*--------Missile Launchers--------*/
+            //for( int t = 0; t < MissileLaunchers.Length; t++ )
+            //{
+            //    MissileLaunchers[t].shouldFunction = MissileLaunchers[t].CheckIfInAnyTree();
+            //}
+            //if( MissileLaunchers.Length > 0 )
+            //{
+            //    for( int launcherCount = 0; launcherCount < MissileLaunchers.Length; launcherCount++ )
+            //    {
+            //        Turret_Missile launcherScript = MissileLaunchers[launcherCount].nodeObject.GetComponent<Turret_Missile>();
+            //        if( MissileLaunchers[launcherCount].shouldFunction )
+            //        {
+            //            launcherScript.StructureFunction();
+            //        }
+            //    }
+            //}
 			
 			yield return new WaitForSeconds( beamLife );
 		}
@@ -836,7 +841,7 @@ public class PowerManagerScript : MonoBehaviour {
 		int maximumDistance;
 		
 		int basicCount = (int)( enemyCount * percentBasic );
-		int exploderCount = (int)( enemyCount * percentExploder ) + 5;
+		int exploderCount = (int)( enemyCount * percentExploder );
 		int swarmerCount = (int)( enemyCount * percentSwarmer ) * 2;
 		int tankCount = (int)( enemyCount * percentTank );
 		int cloakerCount = (int)( enemyCount * percentCloaker );
@@ -1071,28 +1076,27 @@ public class PowerManagerScript : MonoBehaviour {
 		triggersTriggered = new bool[numAttacks];
 		
 		enemyCount = 10 + ( 3 * difficulty );
-		
-		
+
 		switch( difficulty )
 		{
 			case -1:
-				percentBasic = 0.8f;
-				percentExploder = 0.1f;
-				percentSwarmer = 0.1f;
-				percentTank = 0f;
-				percentCloaker = 0f;
+				percentBasic = 0.5f;
+				percentExploder = 0.0f;
+				percentSwarmer = 0.0f;
+				percentTank = 0.0f;
+				percentCloaker = 0.0f;
 				break;
 			case 0:
-				percentBasic = 0.6f;
-				percentExploder = 0.2f;
+				percentBasic = 0.5f;
+				percentExploder = 0.1f;
 				percentSwarmer = 0.1f;
 				percentTank = 0.1f;
-	            percentCloaker = 0f;
+	            percentCloaker = 0.0f;
             	break;
 			case 1:
-				percentBasic = 0.1f;
-				percentExploder = 0.1f;
-				percentSwarmer = 0.8f;
+				percentBasic = 0.0f;
+				percentExploder = 0.0f;
+				percentSwarmer = 1.3f;
 				percentTank = 0.0f;
 	            percentCloaker = 0.0f;
             	break;

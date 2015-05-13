@@ -113,12 +113,15 @@ public class GameGUIScript : MonoBehaviour {
 	private Vector3 mousePosition;
 	private Vector3 mousePosOnScreen;
 	private Vector3 newCameraPosition;
+    private Vector3 newBackgroundPosition;
 	public float cameraDragSpeed;
 	
 	private GameObject miningRangeIndicator;
 	private GameObject turretRangeIndicator;
 	private GameObject repairRangeIndicator;
 	private GameObject energyRangeIndicator;
+
+    private GameObject backGround;
 	
 	private GameObject currentSelection;
 	private GameObject currentlyPickedUp;
@@ -143,6 +146,8 @@ public class GameGUIScript : MonoBehaviour {
 	private bool energyRangeDisplay = false;
 	private bool repairRangeDisplay = false;
 	private bool turretRangeDisplay = false;
+
+    private bool gotBackground = false;
 
 	void Awake()
 	{
@@ -204,13 +209,27 @@ public class GameGUIScript : MonoBehaviour {
         mw = Screen.width * (float)3/19;
         mh = Screen.height * (float)8/19;
 
+        if( !gotBackground )
+        {
+            backGround = GameObject.Find( "Background" );
+            gotBackground = true;
+        }
+
+
+
+
         // camera movement
         if( Input.GetMouseButton( 1 ) )
         {
-            Vector3 dragPanning = mousePosition - Input.mousePosition.FromMainScreenToWorld();
-            dragPanning.z = 0;
-            transform.position += dragPanning;
-            Cursor.visible = false;
+            if( newCameraPosition == Vector3.zero )
+            {
+                Vector3 dragPanning = mousePosition - Input.mousePosition.FromMainScreenToWorld();
+                dragPanning.z = 0;
+                transform.position += dragPanning;
+                Cursor.visible = false;
+
+                backGround.transform.position += dragPanning / 2;
+            }
         }
         if( Input.GetMouseButtonUp( 1 ) )
         {
@@ -332,17 +351,17 @@ public class GameGUIScript : MonoBehaviour {
 				PickUpTurret();
 			}
 		}
-		if( Input.GetKeyDown( KeyCode.Alpha7 ) )
-		{
-			if( powerManager.currentMinerals >= missileLauncherCost )
-			{
-				if( currentlyPickedUp )
-				{
-					DestroyPickedUp();
-				}
-				PickUpMissile();
-			}
-		}
+        //if( Input.GetKeyDown( KeyCode.Alpha7 ) )
+        //{
+        //    if( powerManager.currentMinerals >= missileLauncherCost )
+        //    {
+        //        if( currentlyPickedUp )
+        //        {
+        //            DestroyPickedUp();
+        //        }
+        //        PickUpMissile();
+        //    }
+        //}
 	
 		// check if you're holding a structure
 		if( !placed )
@@ -1021,32 +1040,34 @@ public class GameGUIScript : MonoBehaviour {
 		if( Input.GetKey( KeyCode.A ) )
 		{
 			newCameraPosition.x -= cameraDragSpeed * 0.002f;
+            newBackgroundPosition.x -= ( cameraDragSpeed * 0.002f ) / 2;
 		}
 		if( Input.GetKey( KeyCode.D ) )
 		{
 			newCameraPosition.x += cameraDragSpeed * 0.002f;
+            newBackgroundPosition.x += ( cameraDragSpeed * 0.002f ) / 2;
 		}
 		if( Input.GetKey( KeyCode.W ) )
 		{
 			newCameraPosition.y += cameraDragSpeed * 0.002f;
+            newBackgroundPosition.y += ( cameraDragSpeed * 0.002f ) / 2;
 		}
 		if( Input.GetKey( KeyCode.S ) )
 		{
 			newCameraPosition.y -= cameraDragSpeed * 0.002f;
+            newBackgroundPosition.y -= ( cameraDragSpeed * 0.002f ) / 2;
 		}
 		if( Input.GetKeyDown( KeyCode.Space ) )
 		{
 			newCameraPosition.x = 0f;
 			newCameraPosition.y = 0f;
+            newBackgroundPosition.x = 0f;
+            newBackgroundPosition.y = 0f;
 		}
 		
 		transform.Translate( newCameraPosition );
-        //if( Input.GetMouseButtonUp( 1 ) )
-        //{
-        //    newCameraPosition = new Vector3( 0f, 0f, 0f );
-        //    Cursor.visible = true;
-        //}
-		
+        backGround.transform.Translate( newBackgroundPosition );
+
 		if( Input.GetAxis( "Mouse ScrollWheel" ) < 0 ) // if you scroll wheel backwards
 		{
 			Camera.main.orthographicSize++;
