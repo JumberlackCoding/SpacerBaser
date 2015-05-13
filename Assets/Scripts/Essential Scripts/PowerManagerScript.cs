@@ -2101,8 +2101,23 @@ public class PowerManagerScript : MonoBehaviour {
 				}
 			}
 			Trees.RebuildTrees( touchedTrees, BeamsRecord, NodesRecord );
+            
+            // after we remove what we need and rebuilt the trees we check the beams to make sure there aren't any left over
+            CheckBeams();
 		}
 	}
+
+    // this function should remove any beams that would have been left over
+    void CheckBeams()
+    {
+        for( int i = 0; i < BeamsRecord.beamsInRecord; i++ )
+        {
+            if( ( BeamsRecord.energyBeams[i].End1 == null ) || ( BeamsRecord.energyBeams[i].End2 == null ) )
+            {
+                Destroy( BeamsRecord.energyBeams[i].beamObject );
+            }
+        }
+    }
 }
 
 
