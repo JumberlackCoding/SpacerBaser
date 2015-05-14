@@ -68,6 +68,8 @@ public class GameGUIScript : MonoBehaviour {
 	public int minerCost;
 	
 	public float cameraZoom;
+
+    public bool paused = false;
 	
     //private float x1;
     //private float x2;
@@ -137,10 +139,16 @@ public class GameGUIScript : MonoBehaviour {
 	private SpriteRenderer currentlyPickedSprite;
 	
 	private bool placed = true;
-	public bool paused = false;
 	private bool tutorial = false;
 	private bool options = false;
 	private bool musicIntroDone = true;
+
+    // structure upgrade bools
+    private bool solarCollectorUpgradeBool = false;
+    private bool minerUpgradeBool = false;
+    private bool solarBatteryUpgradeBool = false;
+    private bool repairStationUpgradeBool = false;
+    private bool turretUpgradeBool = false;
 	
 	private bool miningRangeDisplay = false;
 	private bool energyRangeDisplay = false;
@@ -692,7 +700,7 @@ public class GameGUIScript : MonoBehaviour {
 					Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
 					RaycastHit2D hit = Physics2D.GetRayIntersection( ray, Mathf.Infinity );
 					
-					if( hit.collider != null )
+					if( ( hit.collider != null ) && ( hit.transform.gameObject.name != "EnergyBeamPreFab(Clone)" ) )
 					{
 						currentSelection = hit.transform.gameObject;
 	
@@ -775,6 +783,11 @@ public class GameGUIScript : MonoBehaviour {
 					else
 					{
 						currentSelection = null;
+                        minerUpgradeBool = false;
+                        repairStationUpgradeBool = false;
+                        solarBatteryUpgradeBool = false;
+                        solarCollectorUpgradeBool = false;
+                        turretUpgradeBool = false;
 	
 						if( miningRangeIndicator != null )
 						{
@@ -799,6 +812,11 @@ public class GameGUIScript : MonoBehaviour {
 				if( currentSelection != null )
 				{
 					currentSelection = null;
+                    minerUpgradeBool = false;
+                    repairStationUpgradeBool = false;
+                    solarBatteryUpgradeBool = false;
+                    solarCollectorUpgradeBool = false;
+                    turretUpgradeBool = false;
 					
 					if( miningRangeIndicator != null )
 					{
@@ -1076,7 +1094,7 @@ public class GameGUIScript : MonoBehaviour {
 		{
 			Camera.main.orthographicSize--;
 		}
-		Camera.main.orthographicSize = Mathf.Clamp( Camera.main.orthographicSize, 2.0f, 10f ); // make sure the zoom doesn't get closer than 2.0 or further than 10
+		Camera.main.orthographicSize = Mathf.Clamp( Camera.main.orthographicSize, 1.5f, 5f ); // make sure the zoom doesn't get closer than 1.5 or further than 5
     }
 
 	private IEnumerator musicEntry()
@@ -1132,6 +1150,11 @@ public class GameGUIScript : MonoBehaviour {
 		{
 			if( !paused )
 			{
+                minerUpgradeBool = false;
+                repairStationUpgradeBool = false;
+                solarBatteryUpgradeBool = false;
+                solarCollectorUpgradeBool = false;
+                turretUpgradeBool = false;
 				paused = true;
 			}
 			else
@@ -1487,6 +1510,7 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
 					
+                    // salvage button
 					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
 					{
 						MinerScript structScript = currentSelection.GetComponent<MinerScript>();
@@ -1516,6 +1540,21 @@ public class GameGUIScript : MonoBehaviour {
 							miningRangeDisplay = false;
 						}
 					}
+
+                    // upgrade button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    {
+                        MinerScript structScript = currentSelection.GetComponent<MinerScript>();
+                        if( structScript.built )
+                        {
+                            minerUpgradeBool = !minerUpgradeBool;
+                            if( ( miningRangeIndicator != null ) && ( minerUpgradeBool == true ) )
+                            {
+                                Destroy( miningRangeIndicator.gameObject );
+                                miningRangeDisplay = false;
+                            }
+                        }
+                    }
 					break;
 				case "EnergyStoragePreFab(Clone)":
 					health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
@@ -1532,23 +1571,33 @@ public class GameGUIScript : MonoBehaviour {
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         structScript.StartCoroutine( structScript.Die( true, batteryCost ) );
 					}
+
+                    // upgrade button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    {
+                        GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
+                        if( structScript.built )
+                        {
+                            solarBatteryUpgradeBool = !solarBatteryUpgradeBool;
+                        }
+                    }
 					break;
-				case "MissilePreFab(Clone)":
-					health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
-					beamsCount = powerManager.Trees.GetNodeAttachedBeams( currentSelection, powerManager.NodesRecord );
-					storedEnergy = powerManager.Trees.GetNodeStoredPower( currentSelection, powerManager.NodesRecord );
+                //case "MissilePreFab(Clone)":
+                //    health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
+                //    beamsCount = powerManager.Trees.GetNodeAttachedBeams( currentSelection, powerManager.NodesRecord );
+                //    storedEnergy = powerManager.Trees.GetNodeStoredPower( currentSelection, powerManager.NodesRecord );
 					
-					GUI.Label( new Rect( w2+70 , h1 / 2 - 40, 32, 32 ), new GUIContent( missiles ) );
-					GUI.Label( new Rect( w3 * (float)1/13, h1 / 2, w4, 50 ), "Energy: " + storedEnergy );
-					GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
-					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
+                //    GUI.Label( new Rect( w2+70 , h1 / 2 - 40, 32, 32 ), new GUIContent( missiles ) );
+                //    GUI.Label( new Rect( w3 * (float)1/13, h1 / 2, w4, 50 ), "Energy: " + storedEnergy );
+                //    GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
+                //    GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
 					
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
-					{
-						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
-						structScript.Die( true, missileLauncherCost );
-					}
-					break;
+                //    if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+                //    {
+                //        GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
+                //        structScript.Die( true, missileLauncherCost );
+                //    }
+                //    break;
 				case "RepairStationPreFab(Clone)":
 					health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
 					beamsCount = powerManager.Trees.GetNodeAttachedBeams( currentSelection, powerManager.NodesRecord );
@@ -1569,6 +1618,21 @@ public class GameGUIScript : MonoBehaviour {
                             structScript.StartCoroutine( structScript.Die( true, repairStationCost ) );
 						}
 					}
+
+                    // upgrade button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    {
+                        GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
+                        if( structScript.built )
+                        {
+                            repairStationUpgradeBool = !repairStationUpgradeBool;
+                            if( ( repairRangeIndicator != null ) && ( repairStationUpgradeBool == true ) )
+                            {
+                                Destroy( repairRangeIndicator.gameObject );
+                                repairRangeDisplay = false;
+                            }
+                        }
+                    }
 					break;
 				case "TurretPreFab(Clone)":
 					health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
@@ -1590,6 +1654,20 @@ public class GameGUIScript : MonoBehaviour {
 							turretRangeDisplay = false;
 						}
 					}
+                    // upgrade button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    {
+                        GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
+                        if( structScript.built )
+                        {
+                            turretUpgradeBool = !turretUpgradeBool;
+                            if( ( turretRangeIndicator != null ) && ( turretUpgradeBool == true ) )
+                            {
+                                Destroy( turretRangeIndicator.gameObject );
+                                turretRangeDisplay = false;
+                            }
+                        }
+                    }
 					break;
 				case "SolarCollectorPreFab(Clone)":
 					health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
@@ -1608,6 +1686,16 @@ public class GameGUIScript : MonoBehaviour {
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         structScript.StartCoroutine( structScript.Die( true, generatorCost ) );
 					}
+
+                    // upgrade button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    {
+                        GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
+                        if( structScript.built )
+                        {
+                            solarCollectorUpgradeBool = !solarCollectorUpgradeBool;
+                        }
+                    }
 					break;
 				case "EnergyNodePreFab(Clone)":
 					health = powerManager.Trees.GetNodeHealth( currentSelection, powerManager.NodesRecord );
@@ -1629,6 +1717,83 @@ public class GameGUIScript : MonoBehaviour {
 					break;
 				}
 				GUI.EndGroup();
+
+                float y2 = (float)Screen.height * 5f / 10f;
+                
+                // Upgrade windows
+                GUI.skin = mainSkin;
+                GUI.BeginGroup( new Rect( x5, y2, w2, h1 ), "" );
+                if( minerUpgradeBool )
+                {
+                    GUI.Box( new Rect( 0, 0, w2, h1 ), "Choose an upgrade" );
+                    if( GUI.Button( new Rect( 10, 25, w2 / 2 - 15, h1 - 35 ), miner ) )
+                    {
+                        
+                    }
+                    GUI.Label( new Rect( w2 / 4 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Miner V2" );
+                    if( GUI.Button( new Rect( w2 / 2 + 5, 25, w2 / 2 - 15, h1 - 35 ), miner ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 * 3 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Asteroid Bore" );
+                }
+                else if( solarCollectorUpgradeBool )
+                {
+                    GUI.Box( new Rect( 0, 0, w2, h1 ), "Choose an upgrade" );
+                    if( GUI.Button( new Rect( 10, 25, w2 / 2 - 15, h1 - 35 ), solar ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Collector V2" );
+                    if( GUI.Button( new Rect( w2 / 2 + 5, 25, w2 / 2 - 15, h1 - 35 ), solar ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 * 3 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Shield Generator" );
+                }
+                else if( solarBatteryUpgradeBool )
+                {
+                    GUI.Box( new Rect( 0, 0, w2, h1 ), "Choose an upgrade" );
+                    if( GUI.Button( new Rect( 10, 25, w2 / 2 - 15, h1 - 35 ), storage ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Battery V2" );
+                    if( GUI.Button( new Rect( w2 / 2 + 5, 25, w2 / 2 - 15, h1 - 35 ), storage ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 * 3 - 40, h1 - 65, w2 / 2 - 15, 30 ), "EMP Emitter" );
+                }
+                else if( turretUpgradeBool )
+                {
+                    GUI.Box( new Rect( 0, 0, w2, h1 ), "Choose an upgrade" );
+                    if( GUI.Button( new Rect( 10, 25, w2 / 2 - 15, h1 - 35 ), turret ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Long Range" );
+                    if( GUI.Button( new Rect( w2 / 2 + 5, 25, w2 / 2 - 15, h1 - 35 ), turret ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 * 3 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Short Range" );
+                }
+                else if( repairStationUpgradeBool )
+                {
+                    GUI.Box( new Rect( 0, 0, w2, h1 ), "Choose an upgrade" );
+                    if( GUI.Button( new Rect( 10, 25, w2 / 2 - 15, h1 - 35 ), healer ) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Repair Station V2" );
+                    if( GUI.Button( new Rect( w2 / 2 + 5, 25, w2 / 2 - 15, h1 - 35 ), healer) )
+                    {
+
+                    }
+                    GUI.Label( new Rect( w2 / 4 * 3 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Something Else" );
+                }
+                GUI.EndGroup();
 			}
 			
 			// border around the minimap
