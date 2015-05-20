@@ -116,6 +116,9 @@ public class GameGUIScript : MonoBehaviour {
 	private Vector3 mousePosOnScreen;
 	private Vector3 newCameraPosition;
     private Vector3 newBackgroundPosition;
+    private Vector3 cameraPos;
+    private Vector3 cameraPosOld;
+    private Vector3 cameraVelocity;
 	public float cameraDragSpeed;
 	
 	private GameObject miningRangeIndicator;
@@ -239,9 +242,20 @@ public class GameGUIScript : MonoBehaviour {
                 backGround.transform.position += dragPanning / 2;
             }
         }
+
         if( Input.GetMouseButtonUp( 1 ) )
         {
             Cursor.visible = true;
+        }
+        cameraPos = transform.position;
+        print( cameraVelocity );
+        if( newCameraPosition == Vector3.zero )
+        {
+            cameraVelocity = ( cameraPos - cameraPosOld ) / Time.deltaTime;
+            cameraVelocity.z = 0f;
+            cameraPosOld = cameraPos;
+
+            transform.Translate( cameraVelocity * 0.09f );
         }
 
 		// get current mouse coordinates
@@ -1095,6 +1109,7 @@ public class GameGUIScript : MonoBehaviour {
 			Camera.main.orthographicSize--;
 		}
 		Camera.main.orthographicSize = Mathf.Clamp( Camera.main.orthographicSize, 1.5f, 5f ); // make sure the zoom doesn't get closer than 1.5 or further than 5
+
     }
 
 	private IEnumerator musicEntry()
