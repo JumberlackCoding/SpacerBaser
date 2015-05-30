@@ -3,11 +3,9 @@ using System.Collections;
 
 public class Enemy_Exploder : GenericEnemyScript {
 
-	bool called;
-
 	// Use this for initialization
 	void Start() {
-
+        StartCoroutine( CheckCloserTarget() );
 	}
 		
 	// Update is called once per frame
@@ -20,12 +18,12 @@ public class Enemy_Exploder : GenericEnemyScript {
             inRange = false;
 			called = true;
         }
-        target = AcquireTarget();
-		if( prevTarget != target )
-		{
-			prevTarget = target;
-			called = true;
-		}
+        //target = AcquireTarget();
+        //if( prevTarget != target )
+        //{
+        //    prevTarget = target;
+        //    called = true;
+        //}
         if( target != null )
         {
 			if( called )
@@ -44,7 +42,12 @@ public class Enemy_Exploder : GenericEnemyScript {
 			if( distanceFromTarget > range )
 			{
 				inRange = false;
+                checkTimeDelay = Random.Range( 6.8f, 7.21f );
 			}
+            else
+            {
+                checkTimeDelay = Random.Range( 1.8f, 2.21f );
+            }
             if( inRange == false )
             {
                 MoveToTarget();

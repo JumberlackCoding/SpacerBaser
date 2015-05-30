@@ -27,15 +27,31 @@ public class GenericEnemyScript : MonoBehaviour {
 	protected float startTime;
 	protected float rangeFromTarget;
 	protected float totalDistance;
+    protected float checkTimeDelay;
 	
 	protected bool inRange = false;
 	protected bool haveTarget = false;
-	protected bool startedAttacking = false;
+    protected bool startedAttacking = false;
+    protected bool called = true;
 
 
 
 
 	//================FUNCTIONS=================
+
+    protected virtual IEnumerator CheckCloserTarget()
+    {
+        while( true )
+        {
+            yield return new WaitForSeconds( checkTimeDelay );
+
+            target = AcquireTarget();
+            if( target != prevTarget )
+            {
+                called = true;
+            }
+        }
+    }
 
 	protected virtual IEnumerator PulseAction()
 	{

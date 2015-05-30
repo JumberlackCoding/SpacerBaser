@@ -7,12 +7,12 @@ public class Enemy_Cloaker : GenericEnemyScript {
 	
 	private GameObject cloakInAction;
 	private SpriteRenderer sprite;
-	private bool called = true;
 	private bool fired = false;
 	
 	// Use this for initialization
 	void Start() {
 		sprite = GetComponent<SpriteRenderer>();
+        StartCoroutine( CheckCloserTarget() );
 	}
 	
 	// Update is called once per frame
@@ -27,12 +27,12 @@ public class Enemy_Cloaker : GenericEnemyScript {
 			startedAttacking = false;
 			called = true;
 		}
-		target = AcquireTarget();
-		if( prevTarget != target )
-		{
-			prevTarget = target;
-			called = true;
-		}
+        //target = AcquireTarget();
+        //if( prevTarget != target )
+        //{
+        //    prevTarget = target;
+        //    called = true;
+        //}
 		if( target != null )
 		{
 			if( called )
@@ -48,10 +48,15 @@ public class Enemy_Cloaker : GenericEnemyScript {
 		if( haveTarget )
 		{
 			float distanceFromTarget = Vector3.Distance( transform.position, targetLocation );
-			if( distanceFromTarget > range )
-			{
-				inRange = false;
-			}
+            if( distanceFromTarget > range )
+            {
+                inRange = false;
+                checkTimeDelay = Random.Range( 6.8f, 7.21f );
+            }
+            else
+            {
+                checkTimeDelay = Random.Range( 1.8f, 2.21f );
+            }
 			if( inRange == false )
 			{
 				transform.tag = "Cloaked";

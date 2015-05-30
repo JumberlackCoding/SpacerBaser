@@ -119,7 +119,7 @@ public class GameGUIScript : MonoBehaviour {
     private Vector3 cameraPos;
     private Vector3 cameraPosOld;
     private Vector3 cameraVelocity;
-	public float cameraDragSpeed;
+	private float cameraDragSpeed;
 	
 	private GameObject miningRangeIndicator;
 	private GameObject turretRangeIndicator;
@@ -145,6 +145,7 @@ public class GameGUIScript : MonoBehaviour {
 	private bool tutorial = false;
 	private bool options = false;
 	private bool musicIntroDone = true;
+    private bool doDragSlow = false;
 
     // structure upgrade bools
     private bool solarCollectorUpgradeBool = false;
@@ -246,16 +247,20 @@ public class GameGUIScript : MonoBehaviour {
         if( Input.GetMouseButtonUp( 1 ) )
         {
             Cursor.visible = true;
+            doDragSlow = true;
         }
         cameraPos = transform.position;
-        print( cameraVelocity );
-        if( newCameraPosition == Vector3.zero )
+        if( cameraPos == cameraPosOld )
+        {
+            doDragSlow = false;
+        }
+        if( ( newCameraPosition == Vector3.zero ) && ( doDragSlow ) )
         {
             cameraVelocity = ( cameraPos - cameraPosOld ) / Time.deltaTime;
             cameraVelocity.z = 0f;
             cameraPosOld = cameraPos;
 
-            transform.Translate( cameraVelocity * 0.09f );
+            transform.Translate( cameraVelocity * Time.deltaTime * 0.8f );
         }
 
 		// get current mouse coordinates

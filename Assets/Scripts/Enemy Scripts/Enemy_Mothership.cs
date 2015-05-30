@@ -21,8 +21,6 @@ public class Enemy_Mothership : GenericEnemyScript {
     private int sapperCharges;
     private int sappersLaunched;
 
-    private bool called = true;
-
     void Awake()
     {
         spriteManager = GetComponent<SpriteRenderer>();
@@ -35,6 +33,7 @@ public class Enemy_Mothership : GenericEnemyScript {
         sapperCharges = 0;
         sappersLaunched = 0;
         StartCoroutine( GetCharges() );
+        StartCoroutine( CheckCloserTarget() );
 	}
 	
 	// Update is called once per frame
@@ -107,12 +106,12 @@ public class Enemy_Mothership : GenericEnemyScript {
             startedAttacking = false;
             called = true;
         }
-        target = AcquireTarget();
-        if( prevTarget != target )
-        {
-            prevTarget = target;
-            called = true;
-        }
+        //target = AcquireTarget();
+        //if( prevTarget != target )
+        //{
+        //    prevTarget = target;
+        //    called = true;
+        //}
         if( target != null )
         {
             if( called )
@@ -131,6 +130,11 @@ public class Enemy_Mothership : GenericEnemyScript {
             if( distanceFromTarget > range )
             {
                 inRange = false;
+                checkTimeDelay = Random.Range( 6.8f, 7.21f );
+            }
+            else
+            {
+                checkTimeDelay = Random.Range( 1.8f, 2.21f );
             }
             if( inRange == false )
             {
