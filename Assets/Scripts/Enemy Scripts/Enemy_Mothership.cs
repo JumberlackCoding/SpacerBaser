@@ -99,19 +99,20 @@ public class Enemy_Mothership : GenericEnemyScript {
         // usual enemy behaviour
         if( target == null )
         {
-            targetLocation = transform.position;
-            totalDistance = 0f;
-            haveTarget = false;
-            inRange = false;
-            startedAttacking = false;
-            called = true;
+            target = AcquireTarget();
+
+            if( target == null )
+            {
+                targetLocation = transform.position;
+                totalDistance = 0f;
+                haveTarget = false;
+                inRange = false;
+            }
+            else
+            {
+                called = true;
+            }
         }
-        //target = AcquireTarget();
-        //if( prevTarget != target )
-        //{
-        //    prevTarget = target;
-        //    called = true;
-        //}
         if( target != null )
         {
             if( called )

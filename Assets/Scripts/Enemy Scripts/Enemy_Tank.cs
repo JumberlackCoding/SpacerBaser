@@ -12,22 +12,22 @@ public class Enemy_Tank : GenericEnemyScript {
 	
 	// Update is called once per frame
 	protected void Update() {
-		if( target == null )
-		{
-			targetLocation = transform.position;
-			totalDistance = 0f;
-			haveTarget = false;
-			inRange = false;
-			//			StopCoroutine( PulseAction() );
-			startedAttacking = false;
-			called = true;
-		}
-        //target = AcquireTarget();
-        //if( prevTarget != target )
-        //{
-        //    prevTarget = target;
-        //    called = true;
-        //}
+        if( target == null )
+        {
+            target = AcquireTarget();
+
+            if( target == null )
+            {
+                targetLocation = transform.position;
+                totalDistance = 0f;
+                haveTarget = false;
+                inRange = false;
+            }
+            else
+            {
+                called = true;
+            }
+        }
 		if( target != null )
 		{
 			if( called )
