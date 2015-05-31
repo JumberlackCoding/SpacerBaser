@@ -119,8 +119,6 @@ public class GameGUIScript : MonoBehaviour {
 	private Vector3 mousePosOnScreen;
 	private Vector3 newCameraPosition;
     private Vector3 newBackgroundPosition;
-    private Vector3 cameraPos;
-    private Vector3 cameraPosOld;
     private Vector3 cameraVelocity;
 	private float cameraDragSpeed;
 	
@@ -1861,7 +1859,10 @@ public class GameGUIScript : MonoBehaviour {
 			Destroy( energyRangeIndicator.gameObject );
 			energyRangeDisplay = false;
 		}
-		
+
+        GenericStructureScript temp = currentlyPickedUp.GetComponent<GenericStructureScript>();
+        temp.DestroyHealthBars();
+
 		currentlyPickedCol = null;
 		currentlyPickedSprite = null;
 		Destroy( currentlyPickedUp.gameObject );

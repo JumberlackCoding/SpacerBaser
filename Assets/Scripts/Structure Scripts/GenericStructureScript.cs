@@ -30,11 +30,20 @@ public class GenericStructureScript : MonoBehaviour {
 	public GenericEnemyScript targetScript;
 	public bool inRange = false;
 	public bool placed = false;
-	public bool built = false;
+    public bool built = false;
+    public bool healthBarBackMade = false;
+    public bool healthBarFrontMade = false;
 
 	public GameObject BuildBackPreFab;
 	public GameObject BuildForePreFab;
-	
+
+    [SerializeField]
+    protected GameObject healthBarBackPreFab;
+    protected GameObject healthBarBackObj;
+    [SerializeField]
+    protected GameObject healthBarFrontPreFab;
+    protected GameObject healthBarFrontObj;
+
 	protected Vector3 buildBarBackPos;
 	protected Vector3 buildBarForePos;
 	protected Vector3 buildBarSize;
@@ -223,7 +232,14 @@ public class GenericStructureScript : MonoBehaviour {
 			Destroy( backBuildBar.gameObject );
 	    }
 	    DestroyBeam();
-
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
         partSys.Play();
 
         yield return new WaitForSeconds( 0.2f );
@@ -260,4 +276,16 @@ public class GenericStructureScript : MonoBehaviour {
 			Destroy( beamObj.gameObject );
 		}
 	}
+
+    public virtual void DestroyHealthBars()
+    {
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
+    }
 }

@@ -33,6 +33,47 @@ public class MinerScript : GenericStructureScript {
                 }
             }
 
+            // handle health bars
+            if( health < maxHealth )
+            {
+                if( !healthBarBackMade )
+                {
+                    healthBarBackObj = (GameObject)Instantiate( healthBarBackPreFab, new Vector3( transform.position.x, transform.position.y + 0.12f, transform.position.z - 0.5f ), Quaternion.identity );
+
+                    healthBarBackMade = true;
+                }
+                if( !healthBarFrontMade )
+                {
+                    healthBarFrontObj = (GameObject)Instantiate( healthBarFrontPreFab, new Vector3( transform.position.x, transform.position.y + 0.12f, transform.position.z - 1.0f ), Quaternion.identity );
+                    healthBarFrontMade = true;
+                }
+
+                if( healthBarBackObj )
+                {
+                    healthBarBackObj.transform.position = new Vector3( transform.position.x, transform.position.y + 0.12f, transform.position.z - 0.5f );
+                }
+
+                if( healthBarFrontObj )
+                {
+                    float healthPercent = (float)health / maxHealth;
+                    healthBarFrontObj.transform.localScale = new Vector3( 0.2f * healthPercent, healthBarFrontObj.transform.localScale.y, healthBarFrontObj.transform.localScale.z );
+                    healthBarFrontObj.transform.position = new Vector3( transform.position.x - 0.1f + ( 0.1f * healthPercent ), transform.position.y + 0.12f, transform.position.z - 1.0f );
+                }
+            }
+            else
+            {
+                if( healthBarBackObj )
+                {
+                    Destroy( healthBarBackObj );
+                    healthBarBackMade = false;
+                }
+                if( healthBarFrontObj )
+                {
+                    Destroy( healthBarFrontObj );
+                    healthBarFrontMade = false;
+                }
+            }
+
             if( health <= 0 )
             {
                 StartCoroutine( Die( false, 0 ) );
@@ -143,7 +184,14 @@ public class MinerScript : GenericStructureScript {
 			Destroy( backBuildBar.gameObject );
 		}
 		DestroyBeams();
-
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
         partSys.Play();
 
         yield return new WaitForSeconds( 0.2f );

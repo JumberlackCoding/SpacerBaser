@@ -4,18 +4,30 @@ using System.Collections;
 public class GenericEnemyScript : MonoBehaviour {
 
 	//================FUNCTIONS=================
-
-	public int health;
-	public int damage;
-	
-	public float range;
-	public float movespeed;
-	public float attackSpeed;
+    [SerializeField]
+	protected int maxHealth;
+    [SerializeField]
+    protected int health;
+    [SerializeField]
+	protected int damage;
+    [SerializeField]
+	protected float range;
+    [SerializeField]
+    protected float movespeed;
+    [SerializeField]
+    protected float attackSpeed;
 	
 	public GameObject BeamPreFab;
 
     public ParticleSystem partSys;
-	
+
+    [SerializeField]
+    protected GameObject healthBarBackPreFab;
+    protected GameObject healthBarBackObj;
+    [SerializeField]
+    protected GameObject healthBarFrontPreFab;
+    protected GameObject healthBarFrontObj;
+
 	protected GameObject target = null;
 	protected GameObject prevTarget = null;
 	protected GameObject beamObj;
@@ -33,6 +45,8 @@ public class GenericEnemyScript : MonoBehaviour {
 	protected bool haveTarget = false;
     protected bool startedAttacking = false;
     protected bool called = true;
+    protected bool healthBarFrontMade = false;
+    protected bool healthBarBackMade = false;
 
 
 
@@ -180,6 +194,14 @@ public class GenericEnemyScript : MonoBehaviour {
     public virtual IEnumerator Die()
 	{
         partSys.Play();
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
 
         yield return new WaitForSeconds( 0.2f );
 
