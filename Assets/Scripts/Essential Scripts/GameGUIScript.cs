@@ -1540,7 +1540,7 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
 					
                     // salvage button
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 3 * 2, w3 * (float)3/13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						MinerScript structScript = currentSelection.GetComponent<MinerScript>();
 						if( !structScript.AbleToMine() )
@@ -1570,8 +1570,15 @@ public class GameGUIScript : MonoBehaviour {
 						}
 					}
 
+                    // disable button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 - 2 + 3, w3 * (float)3 / 13, h1 / 3 - 2 ), "Disable" ) )
+                    {
+                        // this will turn off the structure without needing to disable -- useful for if you have too many miners running and you're
+                        // not getting enough power to your turrets.. you can turn off the miners so they stop requesting power and then let your turrets work
+                    }
+
                     // upgrade button
-                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Upgrade" ) )
                     {
                         MinerScript structScript = currentSelection.GetComponent<MinerScript>();
                         if( structScript.built )
@@ -1594,15 +1601,22 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)1/13, h1 / 2, w4, 50 ), "Energy: " + storedEnergy );
 					GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
-					
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         structScript.StartCoroutine( structScript.Die( true, batteryCost ) );
 					}
 
+                    // disable button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 - 2 + 3, w3 * (float)3 / 13, h1 / 3 - 2 ), "Disable" ) )
+                    {
+                        // this will turn off the structure without needing to disable -- useful for if you have too many miners running and you're
+                        // not getting enough power to your turrets.. you can turn off the miners so they stop requesting power and then let your turrets work
+                    }
+
                     // upgrade button
-                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Upgrade" ) )
                     {
                         GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         if( structScript.built )
@@ -1636,8 +1650,8 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)1/13, h1 / 2, w4, 50 ), "Energy: " + storedEnergy );
 					GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
-					
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
 						structScript.Die( true, repairStationCost );
@@ -1648,8 +1662,15 @@ public class GameGUIScript : MonoBehaviour {
 						}
 					}
 
+                    // disable button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 - 2 + 3, w3 * (float)3 / 13, h1 / 3 - 2 ), "Disable" ) )
+                    {
+                        // this will turn off the structure without needing to disable -- useful for if you have too many miners running and you're
+                        // not getting enough power to your turrets.. you can turn off the miners so they stop requesting power and then let your turrets work
+                    }
+
                     // upgrade button
-                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Upgrade" ) )
                     {
                         GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         if( structScript.built )
@@ -1672,8 +1693,8 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)1/13, h1 / 2, w4, 50 ), "Energy: " + storedEnergy );
 					GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
-					
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         structScript.StartCoroutine( structScript.Die( true, turretCost ) );
@@ -1683,8 +1704,16 @@ public class GameGUIScript : MonoBehaviour {
 							turretRangeDisplay = false;
 						}
 					}
+
+                    // disable button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 - 2 + 3, w3 * (float)3 / 13, h1 / 3 - 2 ), "Disable" ) )
+                    {
+                        // this will turn off the structure without needing to disable -- useful for if you have too many miners running and you're
+                        // not getting enough power to your turrets.. you can turn off the miners so they stop requesting power and then let your turrets work
+                    }
+
                     // upgrade button
-                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Upgrade" ) )
                     {
                         GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         if( structScript.built )
@@ -1709,15 +1738,22 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)3/13, h1 / 2, w4, 50 ), "Health: " + health );
 					GUI.Label( new Rect( w3 * (float)5/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Power Generation: "  + powerGeneration );
-					
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         structScript.StartCoroutine( structScript.Die( true, generatorCost ) );
 					}
 
+                    // disable button
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 - 2 + 3, w3 * (float)3 / 13, h1 / 3 - 2 ), "Disable" ) )
+                    {
+                        // this will turn off the structure without needing to disable -- useful for if you have too many miners running and you're
+                        // not getting enough power to your turrets.. you can turn off the miners so they stop requesting power and then let your turrets work
+                    }
+
                     // upgrade button
-                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, 50 ), "Upgrade" ) )
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Upgrade" ) )
                     {
                         GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         if( structScript.built )
@@ -1735,8 +1771,8 @@ public class GameGUIScript : MonoBehaviour {
 					GUI.Label( new Rect( w3 * (float)1/13, h1 / 2, w4, 50 ), "Energy: " + storedEnergy );
 					GUI.Label( new Rect( w3 * (float)4/13, h1 / 2, w4, 50 ), "Health: " + health );
 					GUI.Label( new Rect( w3 * (float)7/13, h1 / 2, w4, 50 ), "Beams: "  + beamsCount );
-					
-					if( GUI.Button( new Rect( w3 * (float)10/13, h1 / 2, w3 * (float)3/13, 50 ), "Salvage" ) )
+
+                    if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
                         structScript.StartCoroutine( structScript.Die( true, nodeCost ) );
