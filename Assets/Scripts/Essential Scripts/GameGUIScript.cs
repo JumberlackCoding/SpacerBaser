@@ -102,7 +102,10 @@ public class GameGUIScript : MonoBehaviour {
     //private float y2;
 	private float py;
 	private float my;
-	
+
+    [SerializeField]
+    private float cameraDrag;
+
     //private float powerPercent;
     //private float currPowFloat;
 	private float mousePosTopDown;
@@ -140,6 +143,7 @@ public class GameGUIScript : MonoBehaviour {
 	
 	private CircleCollider2D currentlyPickedCol;
 	private SpriteRenderer currentlyPickedSprite;
+    private Camera cameraComp;
 	
 	private bool placed = true;
 	private bool tutorial = false;
@@ -165,6 +169,7 @@ public class GameGUIScript : MonoBehaviour {
 	{
 		powerManager = GameObject.Find( "PowerManager" ).GetComponent<PowerManagerScript>();
 		audioManager = GetComponent<AudioSource>();
+        cameraComp = GetComponent<Camera>();
 	}
 
 	// Use this for initialization
@@ -241,26 +246,33 @@ public class GameGUIScript : MonoBehaviour {
                 Cursor.visible = false;
 
                 backGround.transform.position += dragPanning / 2;
+                doDragSlow = false;
             }
         }
-
         if( Input.GetMouseButtonUp( 1 ) )
         {
             Cursor.visible = true;
-            doDragSlow = true;
+
+            if( newCameraPosition == Vector3.zero )
+            {
+                doDragSlow = true;
+            }
         }
-        cameraPos = transform.position;
-        if( cameraPos == cameraPosOld )
-        {
-            doDragSlow = false;
-        }
+        
         if( ( newCameraPosition == Vector3.zero ) && ( doDragSlow ) )
         {
-            cameraVelocity = ( cameraPos - cameraPosOld ) / Time.deltaTime;
+            cameraVelocity = cameraComp.velocity;
             cameraVelocity.z = 0f;
-            cameraPosOld = cameraPos;
 
-            transform.Translate( cameraVelocity * Time.deltaTime * 0.8f );
+            transform.Translate( cameraVelocity * Time.deltaTime * cameraDrag );
+            backGround.transform.Translate( ( cameraVelocity * Time.deltaTime * 0.9f ) / 2 );
+            //print( "Camera Velocity: " + cameraVelocity * Time.deltaTime * 0.8f );
+        }
+        
+
+        if( cameraVelocity == Vector3.zero )
+        {
+            doDragSlow = false;
         }
 
 		// get current mouse coordinates
