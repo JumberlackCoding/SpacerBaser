@@ -2,7 +2,10 @@
 using System.Collections;
 
 public class SolarCollectorScript : GenericStructureScript {
-	
+
+    [SerializeField]
+    private ParticleSystem UpgradePartEmitter;
+
 	// Use this for initialization
 	void Start () {
 		Initialize();
