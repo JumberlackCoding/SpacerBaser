@@ -1425,6 +1425,26 @@ public class PowerManagerScript : MonoBehaviour {
 			}
 		}
 	}
+
+    public void UpdateGenerator( GameObject generator )
+    {
+        PowerTreeNode tempGenerator = Trees.FindNode( generator, NodesRecord );
+        GenericStructureScript SCSript = generator.GetComponent<GenericStructureScript>();
+        if( tempGenerator != null )
+        {
+            if( Generators.Length > 0 )
+            {
+                for( int m = 0; m < Generators.Length; m++ )
+                {
+                    if( Generators[m].nodeObject == generator )
+                    {
+                        Generators[m].powerGenerating = SCSript.powerGeneration;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 	
 	public void AddBatteryToList( GameObject battery )
 	{
@@ -2441,10 +2461,10 @@ public class PowerTree
 		return attachedBeams;
 	}
 	
-	public int GetNodeHealth( GameObject requestedObejct, PowerNodeRecord nodeRecord )
+	public int GetNodeHealth( GameObject requestedObject, PowerNodeRecord nodeRecord )
 	{
 		int health = 0;
-		PowerTreeNode temp = FindNode( requestedObejct, nodeRecord );
+		PowerTreeNode temp = FindNode( requestedObject, nodeRecord );
 		if( temp != null )
 		{
 			GenericStructureScript tempSc = temp.nodeObject.GetComponent<GenericStructureScript>();
@@ -2464,6 +2484,15 @@ public class PowerTree
 		}
 		return gen;
 	}
+
+    public void UpdateNode( GameObject nodeObj, PowerNodeRecord nodeRec, int powerGen, int storedPow, bool shouldFunction, bool built )
+    {
+        PowerTreeNode disNode = FindNode( nodeObj, nodeRec );
+        disNode.powerGenerating = powerGen;
+        disNode.storedPower = storedPow;
+        disNode.shouldFunction = shouldFunction;
+        disNode.built = built;
+    }
 }
 
 

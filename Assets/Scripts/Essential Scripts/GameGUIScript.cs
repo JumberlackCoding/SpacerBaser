@@ -1807,7 +1807,9 @@ public class GameGUIScript : MonoBehaviour {
                     GUI.Box( new Rect( 0, 0, w2, h1 ), "Choose an upgrade" );
                     if( GUI.Button( new Rect( 10, 25, w2 / 2 - 15, h1 - 35 ), solar ) )
                     {
-
+                        solarCollectorUpgradeBool = !solarCollectorUpgradeBool;
+                        SolarCollectorScript SCtemp = currentSelection.GetComponent<SolarCollectorScript>();
+                        SCtemp.UpgradeToGenLevel_2();
                     }
                     GUI.Label( new Rect( w2 / 4 - 40, h1 - 65, w2 / 2 - 15, 30 ), "Collector V2" );
                     if( GUI.Button( new Rect( w2 / 2 + 5, 25, w2 / 2 - 15, h1 - 35 ), solar ) )

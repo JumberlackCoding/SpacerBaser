@@ -3,10 +3,18 @@ using System.Collections;
 
 public class SolarCollectorScript : GenericStructureScript {
 
+    private bool solarGenLevel_1 = false;
+    private bool solarGenLevel_2 = false;
+
     [SerializeField]
     private ParticleSystem UpgradePartEmitter;
+    [SerializeField]
+    private int Level_1_Power_Gen;
+    [SerializeField]
+    private int Level_2_Power_Gen;
+    
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start () {
 		Initialize();
 	}
@@ -23,8 +31,22 @@ public class SolarCollectorScript : GenericStructureScript {
             {
                 if( oneTimeCall )
                 {
-                    oneTimeCall = false;
-                    //				powerManager.UpdateGenerator( powerGeneration, maxStoredPower, gameObject );
+                    if( !GetSolarGenLevel_1() && !GetSolarGenLevel_2() ) // built to be level 1
+                    {
+                        oneTimeCall = false;
+                        SetSolarGenLevel_1( true );
+                        SetSolarGenLevel_2( false );
+                        powerGeneration = Level_1_Power_Gen;
+                    }
+
+                    else if( GetSolarGenLevel_1() && !GetSolarGenLevel_2() ) // after building upgrade to level 2
+                    {
+                        oneTimeCall = false;
+                        SetSolarGenLevel_1( false );
+                        SetSolarGenLevel_2( true );
+                        UpgradePartEmitter.Play();
+                        powerGeneration = Level_2_Power_Gen;
+                    }
                 }
             }
 
@@ -75,4 +97,32 @@ public class SolarCollectorScript : GenericStructureScript {
             }
         }
 	}
+
+    public void UpgradeToGenLevel_2()
+    {
+        Initialize();
+        built = false;
+        oneTimeCall = true;
+        powerManager.Trees.UpdateNode( gameObject, powerManager.NodesRecord, 0, 0, false, false );
+    }
+
+    public bool GetSolarGenLevel_1()
+    {
+        return solarGenLevel_1;
+    }
+
+    public void SetSolarGenLevel_1( bool set )
+    {
+        solarGenLevel_1 = set;
+    }
+
+    public bool GetSolarGenLevel_2()
+    {
+        return solarGenLevel_2;
+    }
+
+    public void SetSolarGenLevel_2( bool set )
+    {
+        solarGenLevel_2 = set;
+    }
 }
