@@ -188,14 +188,6 @@ public class Enemy_Mothership : GenericEnemyScript {
                 healthBarFrontMade = false;
             }
         }
-
-
-        // check if dead
-        if( health <= 0 )
-        {
-            StartCoroutine( Die() );
-        }
-
 	}
 
     public void DropOffPower( int amount )
@@ -215,22 +207,4 @@ public class Enemy_Mothership : GenericEnemyScript {
             }
         }
     }
-
-    public override IEnumerator Die()
-    {
-        partSys.Play();
-        if( healthBarBackObj )
-        {
-            Destroy( healthBarBackObj );
-        }
-        if( healthBarFrontObj )
-        {
-            Destroy( healthBarFrontObj );
-        }
-
-        yield return new WaitForSeconds( 3f );
-
-        Destroy( gameObject );
-    }
-
 }

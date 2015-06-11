@@ -7,7 +7,7 @@ public class GenericEnemyScript : MonoBehaviour {
     [SerializeField]
 	protected int maxHealth;
     [SerializeField]
-    protected int health;
+    protected int _health;
     [SerializeField]
 	protected int damage;
     [SerializeField]
@@ -49,6 +49,26 @@ public class GenericEnemyScript : MonoBehaviour {
     protected bool healthBarBackMade = false;
 
 
+    public int health
+    {
+        // called when retrieving value
+        get
+        {
+            return _health;
+        }
+
+        // called when setting value
+        set
+        {
+            _health = value;
+            // check if dead
+            if( value <= 0 )
+            {
+                _health = 0;
+                Die();
+            }
+        }
+    }
 
 
 	//================FUNCTIONS=================
@@ -164,12 +184,12 @@ public class GenericEnemyScript : MonoBehaviour {
 	
 	public virtual void TakeDamage( int damage )
 	{
-		health -= damage;
+		health = health - damage;
 	}
 	
 	public void DrawBeam()
 	{
-		if( target )
+		if( ( target ) && ( health > 0 ) )
 		{
 			CircleCollider2D targetCol = target.GetComponent<CircleCollider2D>();
 			beamObj = null;
@@ -182,7 +202,7 @@ public class GenericEnemyScript : MonoBehaviour {
 			beamObj.transform.localScale = new Vector3( beamObj.transform.localScale.x, temp.magnitude, beamObj.transform.localScale.z );
 		}
 	}
-	  
+	
 	public void DestroyBeam()
 	{
 		if( beamObj != null )
@@ -191,21 +211,20 @@ public class GenericEnemyScript : MonoBehaviour {
 		}
 	}
 
-    public virtual IEnumerator Die()
+    public virtual void Die()
 	{
         partSys.Play();
+        DestroyBeam();
         if( healthBarBackObj )
         {
-            Destroy( healthBarBackObj );
+            Destroy( healthBarBackObj, 0.1f );
         }
         if( healthBarFrontObj )
         {
-            Destroy( healthBarFrontObj );
+            Destroy( healthBarFrontObj, 0.1f );
         }
 
-        yield return new WaitForSeconds( 0.2f );
-
-		Destroy( gameObject );
+        Destroy( gameObject, 0.2f );
 	}
 	
 }

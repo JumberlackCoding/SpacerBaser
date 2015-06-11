@@ -106,12 +106,6 @@ public class Enemy_Basic : GenericEnemyScript {
                 healthBarFrontMade = false;
             }
         }
-
-        // check if dead
-		if( health <= 0 )
-		{
-            StartCoroutine( Die() );
-		}
 	}
 	
 	protected override IEnumerator PulseAction()
@@ -142,26 +136,5 @@ public class Enemy_Basic : GenericEnemyScript {
 	protected override void AttackTarget ()
 	{
 		StartCoroutine( PulseAction() );	
-	}
-	
-	public override IEnumerator Die()
-	{
-		if( beamObj )
-		{
-			DestroyBeam();
-		}
-        if( healthBarBackObj )
-        {
-            Destroy( healthBarBackObj );
-        }
-        if( healthBarFrontObj )
-        {
-            Destroy( healthBarFrontObj );
-        }
-        partSys.Play();
-
-        yield return new WaitForSeconds( 0.2f );
-
-        Destroy( gameObject );
 	}
 }

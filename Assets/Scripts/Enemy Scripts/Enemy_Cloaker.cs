@@ -124,11 +124,6 @@ public class Enemy_Cloaker : GenericEnemyScript {
                 healthBarFrontMade = false;
             }
         }
-
-		if( health <= 0 )
-		{
-            StartCoroutine( Die() );
-		}
 	}
 	
 	protected override IEnumerator PulseAction()
@@ -161,7 +156,7 @@ public class Enemy_Cloaker : GenericEnemyScript {
 		StartCoroutine( PulseAction() );	
 	}
 	
-	public override IEnumerator Die()
+	public override void Die()
 	{
 		if( beamObj )
 		{
@@ -181,8 +176,6 @@ public class Enemy_Cloaker : GenericEnemyScript {
             Destroy( healthBarFrontObj );
         }
 
-        yield return new WaitForSeconds( 0.2f );
-
-        Destroy( gameObject );
+        Destroy( gameObject, 0.2f );
 	}
 }

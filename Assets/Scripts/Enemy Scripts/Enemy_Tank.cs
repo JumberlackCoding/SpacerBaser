@@ -103,12 +103,6 @@ public class Enemy_Tank : GenericEnemyScript {
                 healthBarFrontMade = false;
             }
         }
-
-
-		if( health <= 0 )
-		{
-            StartCoroutine( Die() );
-		}
 	}
 	
 	protected override IEnumerator PulseAction()
@@ -139,26 +133,5 @@ public class Enemy_Tank : GenericEnemyScript {
 	protected override void AttackTarget ()
 	{
 		StartCoroutine( PulseAction() );	
-	}
-	
-	public override IEnumerator Die()
-	{
-		if( beamObj )
-		{
-			DestroyBeam();
-		}
-        partSys.Play();
-        if( healthBarBackObj )
-        {
-            Destroy( healthBarBackObj );
-        }
-        if( healthBarFrontObj )
-        {
-            Destroy( healthBarFrontObj );
-        }
-
-        yield return new WaitForSeconds( 0.2f );
-
-        Destroy( gameObject );
 	}
 }

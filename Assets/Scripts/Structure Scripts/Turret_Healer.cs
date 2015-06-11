@@ -84,11 +84,6 @@ public class Turret_Healer : GenericStructureScript {
                     healthBarFrontMade = false;
                 }
             }
-
-            if( health <= 0 )
-            {
-                StartCoroutine( Die( false, 0 ) );
-            }
         }
 	}
 	

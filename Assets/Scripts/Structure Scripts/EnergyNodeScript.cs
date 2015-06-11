@@ -65,10 +65,6 @@ public class EnergyNodeScript : GenericStructureScript {
                     healthBarFrontMade = false;
                 }
             }
-            if( health <= 0 )
-            {
-                StartCoroutine( Die( false, 0 ) );
-            }
         }
 	}
 }

@@ -560,7 +560,7 @@ public class GameGUIScript : MonoBehaviour {
 				}
 				if( currentlyPickedUp.gameObject.name == "RepairStationPreFab(Clone)" )
 				{
-					if( repairRangeDisplay )
+					if( ( repairRangeDisplay ) && ( repairRangeIndicator != null ) )
 					{
 						repairRangeIndicator.transform.position = currentlyPickedUp.transform.position;
 					}
@@ -1551,17 +1551,17 @@ public class GameGUIScript : MonoBehaviour {
 								for( int i = 0; i < badMiners.Length; i++ )
 								{
                                     MinerScript tempScript = badMiners[i].GetComponent<MinerScript>();
-									tempScript.StartCoroutine( tempScript.Die( true, minerCost ) );
+									tempScript.Die( true, minerCost );
 								}
 							}
 							else
 							{
-                                structScript.StartCoroutine( structScript.Die( true, minerCost ) );
+                                structScript.Die( true, minerCost );
 							}
 						}
 						else
 						{
-                            structScript.StartCoroutine( structScript.Die( true, minerCost ) );
+                            structScript.Die( true, minerCost );
 						}
 						if( miningRangeIndicator != null )
 						{
@@ -1605,7 +1605,7 @@ public class GameGUIScript : MonoBehaviour {
                     if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
-                        structScript.StartCoroutine( structScript.Die( true, batteryCost ) );
+                        structScript.Die( true, batteryCost );
 					}
 
                     // disable button
@@ -1658,7 +1658,7 @@ public class GameGUIScript : MonoBehaviour {
 						if( repairRangeIndicator != null )
 						{
 							Destroy( repairRangeIndicator.gameObject );
-                            structScript.StartCoroutine( structScript.Die( true, repairStationCost ) );
+                            structScript.Die( true, repairStationCost );
 						}
 					}
 
@@ -1697,7 +1697,7 @@ public class GameGUIScript : MonoBehaviour {
                     if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
-                        structScript.StartCoroutine( structScript.Die( true, turretCost ) );
+                        structScript.Die( true, turretCost );
 						if( turretRangeIndicator != null )
 						{
 							Destroy( turretRangeIndicator.gameObject );
@@ -1742,7 +1742,7 @@ public class GameGUIScript : MonoBehaviour {
                     if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
-                        structScript.StartCoroutine( structScript.Die( true, generatorCost ) );
+                        structScript.Die( true, generatorCost );
 					}
 
                     // disable button
@@ -1775,7 +1775,7 @@ public class GameGUIScript : MonoBehaviour {
                     if( GUI.Button( new Rect( w3 * (float)10 / 13, h1 / 3 * 2, w3 * (float)3 / 13, h1 / 3 - 2 ), "Salvage" ) )
 					{
 						GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
-                        structScript.StartCoroutine( structScript.Die( true, nodeCost ) );
+                        structScript.Die( true, nodeCost );
 					}
 					break;
 				default: 

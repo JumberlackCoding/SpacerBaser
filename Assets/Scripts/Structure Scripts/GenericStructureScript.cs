@@ -17,7 +17,7 @@ public class GenericStructureScript : MonoBehaviour {
 	
 	public int currentPower;
 	public int attachedBeamCount = 0;
-	public int health = 1;
+	public int _health = 1;
 	public int powerToBuild;
 	public int powerToUpgrade = 10;
 	public float buildPercent;	
@@ -60,6 +60,25 @@ public class GenericStructureScript : MonoBehaviour {
 	protected PowerManagerScript powerManager;
 	protected SpriteRenderer sprite;
 	
+    public int health
+    {
+        // called when retrieving the value
+        get
+        {
+            return _health;
+        }
+
+        // called when setting the value
+        set
+        {
+            _health = value;
+            if( _health <= 0 )
+            {
+                Die( false, 0 );
+            }
+        }
+    }
+
 	protected virtual void Initialize()
 	{
 		currentPower = 0;
@@ -207,45 +226,6 @@ public class GenericStructureScript : MonoBehaviour {
         }
 		return tempTarget;
 	}
-
-	public virtual IEnumerator Die( bool salvaged, int cost )
-	{
-        dead = true;
-		if( salvaged )
-		{
-			if( built )
-			{
-				powerManager.currentMinerals += (int)( 0.6f * (float)cost );
-			}
-			else
-			{
-				powerManager.currentMinerals += cost;
-			}
-		}
-		powerManager.RemoveFromEverything( gameObject );
-		if( foreBuildBar != null )
-		{
-			Destroy( foreBuildBar.gameObject );
-		}
-		if( backBuildBar != null )
-		{
-			Destroy( backBuildBar.gameObject );
-	    }
-	    DestroyBeam();
-        if( healthBarBackObj )
-        {
-            Destroy( healthBarBackObj );
-        }
-        if( healthBarFrontObj )
-        {
-            Destroy( healthBarFrontObj );
-        }
-        partSys.Play();
-
-        yield return new WaitForSeconds( 0.2f );
-
-		Destroy( gameObject );
-	}
 	
 	protected virtual void UpdatePowerNode()
 	{
@@ -287,5 +267,42 @@ public class GenericStructureScript : MonoBehaviour {
         {
             Destroy( healthBarFrontObj );
         }
+    }
+
+    public virtual void Die( bool salvaged, int cost )
+    {
+        partSys.Play();
+        dead = true;
+        if( salvaged )
+        {
+            if( built )
+            {
+                powerManager.currentMinerals += (int)( 0.6f * (float)cost );
+            }
+            else
+            {
+                powerManager.currentMinerals += cost;
+            }
+        }
+        powerManager.RemoveFromEverything( gameObject );
+        if( foreBuildBar != null )
+        {
+            Destroy( foreBuildBar.gameObject );
+        }
+        if( backBuildBar != null )
+        {
+            Destroy( backBuildBar.gameObject );
+        }
+        DestroyBeam();
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
+        
+        Destroy( gameObject, 0.2f );
     }
 }

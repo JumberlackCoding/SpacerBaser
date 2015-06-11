@@ -100,17 +100,12 @@ public class Enemy_Exploder : GenericEnemyScript {
                 healthBarFrontMade = false;
             }
         }
-
-        if( health <= 0 )
-        {
-            StartCoroutine( Die() );
-        }
 	}
 	
 	protected override void AttackTarget ()
 	{
 		// deal damage
 		targetScript.TakeDamage( damage );
-        StartCoroutine( Die() );
+        Die();
 	}
 }

@@ -73,11 +73,6 @@ public class MinerScript : GenericStructureScript {
                     healthBarFrontMade = false;
                 }
             }
-
-            if( health <= 0 )
-            {
-                StartCoroutine( Die( false, 0 ) );
-            }
         }
 	}
 	
@@ -160,7 +155,7 @@ public class MinerScript : GenericStructureScript {
 		}
 	}
 	
-	public override IEnumerator Die( bool salvaged, int cost )
+	public override void Die( bool salvaged, int cost )
 	{
         dead = true;
 		if( salvaged )
@@ -183,7 +178,7 @@ public class MinerScript : GenericStructureScript {
 		{
 			Destroy( backBuildBar.gameObject );
 		}
-		DestroyBeams();
+		DestroyBeams(); // may have to destroy multiple beams, hence override
         if( healthBarBackObj )
         {
             Destroy( healthBarBackObj );
@@ -194,8 +189,6 @@ public class MinerScript : GenericStructureScript {
         }
         partSys.Play();
 
-        yield return new WaitForSeconds( 0.2f );
-
-		Destroy( gameObject );
+		Destroy( gameObject, 0.2f );
 	}
 }

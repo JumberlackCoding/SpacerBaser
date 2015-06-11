@@ -90,11 +90,6 @@ public class SolarCollectorScript : GenericStructureScript {
                     healthBarFrontMade = false;
                 }
             }
-
-            if( health <= 0 )
-            {
-                StartCoroutine( Die( false, 0 ) );
-            }
         }
 	}
 
