@@ -111,11 +111,13 @@ public class GenericEnemyScript : MonoBehaviour {
 		if( rangeFromTarget > range )
 		{
 //			inRange = false;
-			float distanceCovered = ( Time.time - startTime ) * movespeed;
-			transform.position = Vector2.Lerp( transform.position, targetLocation, ( movespeed * Time.deltaTime ) / ( totalDistance - distanceCovered ) );
-			
-			float angle = Mathf.Atan2( targetLocation.y - transform.position.y, targetLocation.x - transform.position.x ) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
+            float distanceCovered = ( Time.time - startTime ) * movespeed;
+            transform.position = Vector2.Lerp( transform.position, targetLocation, ( movespeed * Time.deltaTime ) / ( totalDistance - distanceCovered ) );
+
+            float angle = Mathf.Atan2( targetLocation.y - transform.position.y, targetLocation.x - transform.position.x ) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
+
+            //iTween.MoveUpdate( target, iTween.Hash( "z", 0, "orienttopatch", true, "looktime", 0.1f, "time", rangeFromTarget / movespeed ) );
 		}
 
 		else

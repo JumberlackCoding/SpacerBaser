@@ -179,8 +179,12 @@ public class GameGUIScript : MonoBehaviour {
 		currentSelection = null;
 		currentlyPickedUp = null;
 		cameraDragSpeed = 0.0785f*Camera.main.orthographicSize/2.5f;		//Mathf.Pow(Camera.main.orthographicSize,6)/27000;
-		
-		audioManager.ignoreListenerVolume = true;
+
+        audioManager.ignoreListenerVolume = true;
+
+
+        iTween.CameraFadeAdd();
+        iTween.CameraFadeFrom( 1f, 0.5f );
 		
 //		gameManager = GameObject.Find( "GameManager" ).GetComponent<GameManagerScript>();
 	}
