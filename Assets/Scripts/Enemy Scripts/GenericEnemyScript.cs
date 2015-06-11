@@ -117,7 +117,7 @@ public class GenericEnemyScript : MonoBehaviour {
             float angle = Mathf.Atan2( targetLocation.y - transform.position.y, targetLocation.x - transform.position.x ) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
 
-            //iTween.MoveUpdate( target, iTween.Hash( "z", 0, "orienttopatch", true, "looktime", 0.1f, "time", rangeFromTarget / movespeed ) );
+            //iTween.MoveTo( gameObject, iTween.Hash( "position", targetLocation, "speed", movespeed / , "delay", 0.1f ) );
 		}
 
 		else
