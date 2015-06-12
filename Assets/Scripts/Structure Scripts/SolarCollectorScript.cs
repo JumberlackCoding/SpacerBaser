@@ -17,6 +17,8 @@ public class SolarCollectorScript : GenericStructureScript {
     // Use this for initialization
 	void Start () {
 		Initialize();
+        Level_1_Power_Gen = 0;
+        Level_2_Power_Gen = 0;
 	}
 	
 	// Update is called once per frame

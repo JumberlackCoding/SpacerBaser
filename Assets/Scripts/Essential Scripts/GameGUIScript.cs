@@ -172,6 +172,7 @@ public class GameGUIScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        cameraDrag = 0;
 		soundIncreaseDelay = 0.1f;
 
         mineralSkin.label.fontSize = 14;
