@@ -1553,10 +1553,10 @@ public class GameGUIScript : MonoBehaviour {
                     //}
                 }
 
-                GUI.Label(new Rect(w1 / 2 - 45, h1 - 35, 100, 30), "Missile Defense");
-                GUI.Label(new Rect(w1 / 2 - 8, h1 / 3 - 16, 32, 32), new GUIContent(missiles));
-                GUI.skin = mineralSkin;
-                GUI.Label(new Rect(w1 / 2 - 21, h1 / 2 - 05, 50, 50), "" + missileLauncherCost);
+                // GUI.Label(new Rect(w1 / 2 - 45, h1 - 35, 100, 30), "Missile Defense");
+                // GUI.Label(new Rect(w1 / 2 - 8, h1 / 3 - 16, 32, 32), new GUIContent(missiles));
+                // GUI.skin = mineralSkin;
+                // GUI.Label(new Rect(w1 / 2 - 21, h1 / 2 - 05, 50, 50), "" + missileLauncherCost);
                 GUI.EndGroup();
                 GUI.skin = mainSkin;
             }

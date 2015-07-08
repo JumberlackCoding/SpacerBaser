@@ -2,40 +2,39 @@
 using System.Collections;
 
 public class GenericStructureScript : MonoBehaviour {
-
     public ParticleSystem partSys;
-	
-	public int mineralsToBuild;
-	public int maxHealth;
-	public int damage;
-	public float range;
-	public int maxBeamsAllowed;
-	public int powerGeneration;
-	public int powerConsumption;
-	public int maxStoredPower;
-	public float attackSpeed;
-	
-	public int currentPower;
-	public int attachedBeamCount = 0;
-	public int _health = 1;
-	public int powerToBuild;
-	public int powerToUpgrade = 10;
-	public float buildPercent;	
-	public float BarOffset;
-	
-	public float rangeFromTarget;
-	public GameObject target = null;
-	public GameObject BeamPreFab;
-	public Vector3 targetLocation;
-	public GenericEnemyScript targetScript;
-	public bool inRange = false;
-	public bool placed = false;
+
+    public int mineralsToBuild;
+    public int maxHealth;
+    public int damage;
+    public float range;
+    public int maxBeamsAllowed;
+    public int powerGeneration;
+    public int powerConsumption;
+    public int maxStoredPower;
+    public float attackSpeed;
+
+    public int currentPower;
+    public int attachedBeamCount = 0;
+    public int _health = 1;
+    public int powerToBuild;
+    public int powerToUpgrade = 10;
+    public float buildPercent;
+    public float BarOffset;
+
+    public float rangeFromTarget;
+    public GameObject target = null;
+    public GameObject BeamPreFab;
+    public Vector3 targetLocation;
+    public GenericEnemyScript targetScript;
+    public bool inRange = false;
+    public bool placed = false;
     public bool built = false;
     public bool healthBarBackMade = false;
     public bool healthBarFrontMade = false;
 
-	public GameObject BuildBackPreFab;
-	public GameObject BuildForePreFab;
+    public GameObject BuildBackPreFab;
+    public GameObject BuildForePreFab;
 
     [SerializeField]
     protected GameObject healthBarBackPreFab;
@@ -44,22 +43,22 @@ public class GenericStructureScript : MonoBehaviour {
     protected GameObject healthBarFrontPreFab;
     protected GameObject healthBarFrontObj;
 
-	protected Vector3 buildBarBackPos;
-	protected Vector3 buildBarForePos;
-	protected Vector3 buildBarSize;
-	protected Vector3 buildBarSizeMax;
-	
-	protected bool initial = true;
-	protected bool oneTimeCall = true;
+    protected Vector3 buildBarBackPos;
+    protected Vector3 buildBarForePos;
+    protected Vector3 buildBarSize;
+    protected Vector3 buildBarSizeMax;
+
+    protected bool initial = true;
+    protected bool oneTimeCall = true;
     protected bool dead = false;
-	
-	protected GameObject foreBuildBar;
-	protected GameObject backBuildBar;
-	protected GameObject beamObj;
-	
-	protected PowerManagerScript powerManager;
-	protected SpriteRenderer sprite;
-	
+
+    protected GameObject foreBuildBar;
+    protected GameObject backBuildBar;
+    protected GameObject beamObj;
+
+    protected PowerManagerScript powerManager;
+    protected SpriteRenderer sprite;
+
     public int health
     {
         // called when retrieving the value
@@ -72,23 +71,26 @@ public class GenericStructureScript : MonoBehaviour {
         set
         {
             _health = value;
-            if( _health <= 0 )
+            if(_health <= 0)
             {
-                Die( false, 0 );
+                Die(false, 0);
             }
         }
     }
 
-	protected virtual void Initialize()
-	{
-		currentPower = 0;
-		powerToBuild = 10;
-		BarOffset = 0.3f;
-		buildBarSize = new Vector3( 0f, 0f, 0f );
-		buildBarSizeMax = new Vector3( 0.25f, 0.25f, 0.25f );
-		sprite = GetComponent<SpriteRenderer>();
-		powerManager = GameObject.Find( "PowerManager" ).GetComponent<PowerManagerScript>();
-	}
+    protected virtual void Initialize()
+    {
+        currentPower = 0;
+        powerToBuild = 10;
+        BarOffset = 0.3f;
+        buildBarSize = new Vector3(0f, 0f, 0f);
+        buildBarSizeMax = new Vector3(0.25f, 0.25f, 0.25f);
+        sprite = GetComponent<SpriteRenderer>();
+        if(powerManager == null)
+        {
+            powerManager = GameObject.Find("PowerManager").GetComponent<PowerManagerScript>();
+        }
+    }
 	
 	protected virtual void Build()
 	{
