@@ -2,8 +2,14 @@
 using System.Collections;
 
 public class Turret_Healer : GenericStructureScript {
-
-	private bool needScript = true;
+    public float targettingMultiplier_Generator;
+    public float targettingMultiplier_Generator;
+    public float targettingMultiplier_Generator;
+    public float targettingMultiplier_Generator;
+    public float targettingMultiplier_Generator;
+    public float targettingMultiplier_Generator;
+	
+    private bool needScript = true;
 	private bool fired = false;
 	private bool CloserTarget = false;
 	private GenericStructureScript targetAllyScript;
