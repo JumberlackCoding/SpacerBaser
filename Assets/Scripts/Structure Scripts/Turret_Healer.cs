@@ -3,11 +3,10 @@ using System.Collections;
 
 public class Turret_Healer : GenericStructureScript {
     public float targettingMultiplier_Generator;
-    public float targettingMultiplier_Generator;
-    public float targettingMultiplier_Generator;
-    public float targettingMultiplier_Generator;
-    public float targettingMultiplier_Generator;
-    public float targettingMultiplier_Generator;
+    public float targettingMultiplier_Battery;
+    public float targettingMultiplier_Miner;
+    public float targettingMultiplier_Turret;
+    public float targettingMultiplier_Node;
 	
     private bool needScript = true;
 	private bool fired = false;
