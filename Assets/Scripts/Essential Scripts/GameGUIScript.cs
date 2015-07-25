@@ -1770,7 +1770,7 @@ public class GameGUIScript : MonoBehaviour {
                         }
                     }
 
-                    if(GUI.Buttton(new Rect(w3 * (float)10 / 13 - 27, h1 / 3 * 2, 25, 25), "Priority"))
+                    if(GUI.Button(new Rect(w3 * (float)10 / 13 - 27, h1 / 3 * 2, 25, 25), "Priority"))
                     {
                         // click this button to bring up a small GUI that will change the targeting of the structure
                     }
@@ -1848,7 +1848,7 @@ public class GameGUIScript : MonoBehaviour {
                     // upgrade button
                     if(GUI.Button(new Rect(w3 * (float)10 / 13, 2, w3 * (float)3 / 13, h1 / 3 - 2), "Upgrade"))
                     {
-                        GenericStructureScript structScript = currentSelection.GetComponent<GenericStructureScript>();
+                        SolarCollectorScript structScript = currentSelection.GetComponent<SolarCollectorScript>();
                         if(structScript.built)
                         {
                             structScript.UpgradeToGenLevel_2();
