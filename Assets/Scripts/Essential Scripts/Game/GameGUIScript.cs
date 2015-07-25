@@ -182,8 +182,8 @@ public class GameGUIScript : MonoBehaviour {
 
         audioManager.ignoreListenerVolume = true;
 
-        iTween.CameraFadeAdd();
-        iTween.CameraFadeFrom(1f, 0.5f);
+   //     iTween.CameraFadeAdd();
+    //    iTween.CameraFadeFrom(1f, 0.5f);
 
         //		gameManager = GameObject.Find( "GameManager" ).GetComponent<GameManagerScript>();
     }
