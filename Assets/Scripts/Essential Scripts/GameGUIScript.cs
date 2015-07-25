@@ -265,6 +265,7 @@ public class GameGUIScript : MonoBehaviour {
 
             transform.Translate(cameraVelocity * Time.deltaTime * cameraDrag);
             backGround.transform.Translate((cameraVelocity * Time.deltaTime * cameraDrag) / 2);
+            print( "Camera Velocity: " + cameraVelocity * Time.deltaTime * 0.8f );
         }
 
         if(cameraVelocity == Vector3.zero)
