@@ -24,9 +24,46 @@ public class EnergyStorageScript : GenericStructureScript {
                     //				powerManager.UpdateBattery( maxStoredPower, gameObject );
                 }
             }
-            if( health <= 0 )
+
+            // handle health bars
+            if( health < maxHealth )
             {
-                StartCoroutine( Die( false, 0 ) );
+                if( !healthBarBackMade )
+                {
+                    healthBarBackObj = (GameObject)Instantiate( healthBarBackPreFab, new Vector3( transform.position.x, transform.position.y + 0.2f, transform.position.z - 0.5f ), Quaternion.identity );
+
+                    healthBarBackMade = true;
+                }
+                if( !healthBarFrontMade )
+                {
+                    healthBarFrontObj = (GameObject)Instantiate( healthBarFrontPreFab, new Vector3( transform.position.x, transform.position.y + 0.2f, transform.position.z - 1.0f ), Quaternion.identity );
+                    healthBarFrontMade = true;
+                }
+
+                if( healthBarBackObj )
+                {
+                    healthBarBackObj.transform.position = new Vector3( transform.position.x, transform.position.y + 0.2f, transform.position.z - 0.5f );
+                }
+
+                if( healthBarFrontObj )
+                {
+                    float healthPercent = (float)health / maxHealth;
+                    healthBarFrontObj.transform.localScale = new Vector3( 0.2f * healthPercent, healthBarFrontObj.transform.localScale.y, healthBarFrontObj.transform.localScale.z );
+                    healthBarFrontObj.transform.position = new Vector3( transform.position.x - 0.1f + ( 0.1f * healthPercent ), transform.position.y + 0.2f, transform.position.z - 1.0f );
+                }
+            }
+            else
+            {
+                if( healthBarBackObj )
+                {
+                    Destroy( healthBarBackObj );
+                    healthBarBackMade = false;
+                }
+                if( healthBarFrontObj )
+                {
+                    Destroy( healthBarFrontObj );
+                    healthBarFrontMade = false;
+                }
             }
         }
 	}

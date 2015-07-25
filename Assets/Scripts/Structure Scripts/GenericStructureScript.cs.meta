@@ -1,12 +1,20 @@
 fileFormatVersion: 2
 guid: 62a06928c94dbba4584bbcf611e725d9
-timeCreated: 1425857770
+timeCreated: 1433047170
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
+  - partSys: {instanceID: 0}
+  - target: {instanceID: 0}
+  - BeamPreFab: {instanceID: 0}
+  - targetScript: {instanceID: 0}
   - BuildBackPreFab: {fileID: 139092, guid: 6593084b24d0f7e428385aa17731cd0a, type: 2}
   - BuildForePreFab: {fileID: 117716, guid: 42b191ad91c9aa84fbfc446496fa3c6c, type: 2}
+  - healthBarBackPreFab: {fileID: 194884, guid: 748f3568d25ceb2419605b951c48a732,
+      type: 2}
+  - healthBarFrontPreFab: {fileID: 186834, guid: 920defa9064c11b49bf7eb1e289a1d50,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

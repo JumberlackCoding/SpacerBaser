@@ -4,18 +4,30 @@ using System.Collections;
 public class GenericEnemyScript : MonoBehaviour {
 
 	//================FUNCTIONS=================
-
-	public int health;
-	public int damage;
-	
-	public float range;
-	public float movespeed;
-	public float attackSpeed;
+    [SerializeField]
+	protected int maxHealth;
+    [SerializeField]
+    protected int _health;
+    [SerializeField]
+	protected int damage;
+    [SerializeField]
+	protected float range;
+    [SerializeField]
+    protected float movespeed;
+    [SerializeField]
+    protected float attackSpeed;
 	
 	public GameObject BeamPreFab;
 
     public ParticleSystem partSys;
-	
+
+    [SerializeField]
+    protected GameObject healthBarBackPreFab;
+    protected GameObject healthBarBackObj;
+    [SerializeField]
+    protected GameObject healthBarFrontPreFab;
+    protected GameObject healthBarFrontObj;
+
 	protected GameObject target = null;
 	protected GameObject prevTarget = null;
 	protected GameObject beamObj;
@@ -27,15 +39,53 @@ public class GenericEnemyScript : MonoBehaviour {
 	protected float startTime;
 	protected float rangeFromTarget;
 	protected float totalDistance;
+    protected float checkTimeDelay;
 	
 	protected bool inRange = false;
 	protected bool haveTarget = false;
-	protected bool startedAttacking = false;
+    protected bool startedAttacking = false;
+    protected bool called = true;
+    protected bool healthBarFrontMade = false;
+    protected bool healthBarBackMade = false;
 
 
+    public int health
+    {
+        // called when retrieving value
+        get
+        {
+            return _health;
+        }
+
+        // called when setting value
+        set
+        {
+            _health = value;
+            // check if dead
+            if( value <= 0 )
+            {
+                _health = 0;
+                Die();
+            }
+        }
+    }
 
 
 	//================FUNCTIONS=================
+
+    protected virtual IEnumerator CheckCloserTarget()
+    {
+        while( true )
+        {
+            yield return new WaitForSeconds( checkTimeDelay );
+
+            target = AcquireTarget();
+            if( target != prevTarget )
+            {
+                called = true;
+            }
+        }
+    }
 
 	protected virtual IEnumerator PulseAction()
 	{
@@ -61,11 +111,13 @@ public class GenericEnemyScript : MonoBehaviour {
 		if( rangeFromTarget > range )
 		{
 //			inRange = false;
-			float distanceCovered = ( Time.time - startTime ) * movespeed;
-			transform.position = Vector2.Lerp( transform.position, targetLocation, ( movespeed * Time.deltaTime ) / ( totalDistance - distanceCovered ) );
-			
-			float angle = Mathf.Atan2( targetLocation.y - transform.position.y, targetLocation.x - transform.position.x ) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
+            float distanceCovered = ( Time.time - startTime ) * movespeed;
+            transform.position = Vector2.Lerp( transform.position, targetLocation, ( movespeed * Time.deltaTime ) / ( totalDistance - distanceCovered ) );
+
+            float angle = Mathf.Atan2( targetLocation.y - transform.position.y, targetLocation.x - transform.position.x ) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis( angle, Vector3.forward );
+
+            //iTween.MoveTo( gameObject, iTween.Hash( "position", targetLocation, "speed", movespeed / , "delay", 0.1f ) );
 		}
 
 		else
@@ -134,12 +186,12 @@ public class GenericEnemyScript : MonoBehaviour {
 	
 	public virtual void TakeDamage( int damage )
 	{
-		health -= damage;
+		health = health - damage;
 	}
 	
 	public void DrawBeam()
 	{
-		if( target )
+		if( ( target ) && ( health > 0 ) )
 		{
 			CircleCollider2D targetCol = target.GetComponent<CircleCollider2D>();
 			beamObj = null;
@@ -152,7 +204,7 @@ public class GenericEnemyScript : MonoBehaviour {
 			beamObj.transform.localScale = new Vector3( beamObj.transform.localScale.x, temp.magnitude, beamObj.transform.localScale.z );
 		}
 	}
-	  
+	
 	public void DestroyBeam()
 	{
 		if( beamObj != null )
@@ -161,13 +213,20 @@ public class GenericEnemyScript : MonoBehaviour {
 		}
 	}
 
-    public virtual IEnumerator Die()
+    public virtual void Die()
 	{
         partSys.Play();
+        DestroyBeam();
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj, 0.1f );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj, 0.1f );
+        }
 
-        yield return new WaitForSeconds( 0.2f );
-
-		Destroy( gameObject );
+        Destroy( gameObject, 0.2f );
 	}
 	
 }

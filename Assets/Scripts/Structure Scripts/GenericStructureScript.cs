@@ -2,65 +2,95 @@
 using System.Collections;
 
 public class GenericStructureScript : MonoBehaviour {
-
     public ParticleSystem partSys;
-	
-	public int mineralsToBuild;
-	public int maxHealth;
-	public int damage;
-	public float range;
-	public int maxBeamsAllowed;
-	public int powerGeneration;
-	public int powerConsumption;
-	public int maxStoredPower;
-	public float attackSpeed;
-	
-	public int currentPower;
-	public int attachedBeamCount = 0;
-	public int health = 1;
-	public int powerToBuild;
-	public int powerToUpgrade = 10;
-	public float buildPercent;	
-	public float BarOffset;
-	
-	public float rangeFromTarget;
-	public GameObject target = null;
-	public GameObject BeamPreFab;
-	public Vector3 targetLocation;
-	public GenericEnemyScript targetScript;
-	public bool inRange = false;
-	public bool placed = false;
-	public bool built = false;
 
-	public GameObject BuildBackPreFab;
-	public GameObject BuildForePreFab;
-	
-	protected Vector3 buildBarBackPos;
-	protected Vector3 buildBarForePos;
-	protected Vector3 buildBarSize;
-	protected Vector3 buildBarSizeMax;
-	
-	protected bool initial = true;
-	protected bool oneTimeCall = true;
+    public int mineralsToBuild;
+    public int maxHealth;
+    public int damage;
+    public float range;
+    public int maxBeamsAllowed;
+    public int powerGeneration;
+    public int powerConsumption;
+    public int maxStoredPower;
+    public float attackSpeed;
+
+    public int currentPower;
+    public int attachedBeamCount = 0;
+    public int _health = 1;
+    public int powerToBuild;
+    public int powerToUpgrade = 10;
+    public float buildPercent;
+    public float BarOffset;
+
+    public float rangeFromTarget;
+    public GameObject target = null;
+    public GameObject BeamPreFab;
+    public Vector3 targetLocation;
+    public GenericEnemyScript targetScript;
+    public bool inRange = false;
+    public bool placed = false;
+    public bool built = false;
+    public bool healthBarBackMade = false;
+    public bool healthBarFrontMade = false;
+
+    public GameObject BuildBackPreFab;
+    public GameObject BuildForePreFab;
+
+    [SerializeField]
+    protected GameObject healthBarBackPreFab;
+    protected GameObject healthBarBackObj;
+    [SerializeField]
+    protected GameObject healthBarFrontPreFab;
+    protected GameObject healthBarFrontObj;
+
+    protected Vector3 buildBarBackPos;
+    protected Vector3 buildBarForePos;
+    protected Vector3 buildBarSize;
+    protected Vector3 buildBarSizeMax;
+
+    protected bool initial = true;
+    protected bool oneTimeCall = true;
     protected bool dead = false;
-	
-	protected GameObject foreBuildBar;
-	protected GameObject backBuildBar;
-	protected GameObject beamObj;
-	
-	protected PowerManagerScript powerManager;
-	protected SpriteRenderer sprite;
-	
-	protected virtual void Initialize()
-	{
-		currentPower = 0;
-		powerToBuild = 10;
-		BarOffset = 0.3f;
-		buildBarSize = new Vector3( 0f, 0f, 0f );
-		buildBarSizeMax = new Vector3( 0.25f, 0.25f, 0.25f );
-		sprite = GetComponent<SpriteRenderer>();
-		powerManager = GameObject.Find( "PowerManager" ).GetComponent<PowerManagerScript>();
-	}
+
+    protected GameObject foreBuildBar;
+    protected GameObject backBuildBar;
+    protected GameObject beamObj;
+
+    protected PowerManagerScript powerManager;
+    protected SpriteRenderer sprite;
+
+    public int health
+    {
+        // called when retrieving the value
+        get
+        {
+            return _health;
+        }
+
+        // called when setting the value
+        set
+        {
+            _health = value;
+            if(_health <= 0)
+            {
+                Die(false, 0);
+            }
+        }
+    }
+
+    protected virtual void Initialize()
+    {
+        currentPower = 0;
+        powerToBuild = 10;
+        BarOffset = 0.3f;
+        buildBarSize = new Vector3(0f, 0f, 0f);
+        buildBarSizeMax = new Vector3(0.25f, 0.25f, 0.25f);
+        sprite = GetComponent<SpriteRenderer>();
+        if(powerManager == null)
+        {
+            powerManager = GameObject.Find("PowerManager").GetComponent<PowerManagerScript>();
+        }
+    }
 	
 	protected virtual void Build()
 	{
@@ -198,38 +228,6 @@ public class GenericStructureScript : MonoBehaviour {
         }
 		return tempTarget;
 	}
-
-	public virtual IEnumerator Die( bool salvaged, int cost )
-	{
-        dead = true;
-		if( salvaged )
-		{
-			if( built )
-			{
-				powerManager.currentMinerals += (int)( 0.6f * (float)cost );
-			}
-			else
-			{
-				powerManager.currentMinerals += cost;
-			}
-		}
-		powerManager.RemoveFromEverything( gameObject );
-		if( foreBuildBar != null )
-		{
-			Destroy( foreBuildBar.gameObject );
-		}
-		if( backBuildBar != null )
-		{
-			Destroy( backBuildBar.gameObject );
-	    }
-	    DestroyBeam();
-
-        partSys.Play();
-
-        yield return new WaitForSeconds( 0.2f );
-
-		Destroy( gameObject );
-	}
 	
 	protected virtual void UpdatePowerNode()
 	{
@@ -260,4 +258,53 @@ public class GenericStructureScript : MonoBehaviour {
 			Destroy( beamObj.gameObject );
 		}
 	}
+
+    public virtual void DestroyHealthBars()
+    {
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
+    }
+
+    public virtual void Die( bool salvaged, int cost )
+    {
+        partSys.Play();
+        dead = true;
+        if( salvaged )
+        {
+            if( built )
+            {
+                powerManager.currentMinerals += (int)( 0.6f * (float)cost );
+            }
+            else
+            {
+                powerManager.currentMinerals += cost;
+            }
+        }
+        powerManager.RemoveFromEverything( gameObject );
+        if( foreBuildBar != null )
+        {
+            Destroy( foreBuildBar.gameObject );
+        }
+        if( backBuildBar != null )
+        {
+            Destroy( backBuildBar.gameObject );
+        }
+        DestroyBeam();
+        if( healthBarBackObj )
+        {
+            Destroy( healthBarBackObj );
+        }
+        if( healthBarFrontObj )
+        {
+            Destroy( healthBarFrontObj );
+        }
+        
+        Destroy( gameObject, 0.2f );
+    }
 }

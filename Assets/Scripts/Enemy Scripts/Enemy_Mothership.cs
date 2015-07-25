@@ -21,8 +21,6 @@ public class Enemy_Mothership : GenericEnemyScript {
     private int sapperCharges;
     private int sappersLaunched;
 
-    private bool called = true;
-
     void Awake()
     {
         spriteManager = GetComponent<SpriteRenderer>();
@@ -35,6 +33,7 @@ public class Enemy_Mothership : GenericEnemyScript {
         sapperCharges = 0;
         sappersLaunched = 0;
         StartCoroutine( GetCharges() );
+        StartCoroutine( CheckCloserTarget() );
 	}
 	
 	// Update is called once per frame
@@ -100,18 +99,19 @@ public class Enemy_Mothership : GenericEnemyScript {
         // usual enemy behaviour
         if( target == null )
         {
-            targetLocation = transform.position;
-            totalDistance = 0f;
-            haveTarget = false;
-            inRange = false;
-            startedAttacking = false;
-            called = true;
-        }
-        target = AcquireTarget();
-        if( prevTarget != target )
-        {
-            prevTarget = target;
-            called = true;
+            target = AcquireTarget();
+
+            if( target == null )
+            {
+                targetLocation = transform.position;
+                totalDistance = 0f;
+                haveTarget = false;
+                inRange = false;
+            }
+            else
+            {
+                called = true;
+            }
         }
         if( target != null )
         {
@@ -131,6 +131,11 @@ public class Enemy_Mothership : GenericEnemyScript {
             if( distanceFromTarget > range )
             {
                 inRange = false;
+                checkTimeDelay = Random.Range( 6.8f, 7.21f );
+            }
+            else
+            {
+                checkTimeDelay = Random.Range( 1.8f, 2.21f );
             }
             if( inRange == false )
             {
@@ -143,23 +148,46 @@ public class Enemy_Mothership : GenericEnemyScript {
             }
         }
 
-        // check if dead
-        if( health <= 0 )
+        // handle health bars
+        if( health < maxHealth )
         {
-            StartCoroutine( Die() );
+            if( !healthBarBackMade )
+            {
+                healthBarBackObj = (GameObject)Instantiate( healthBarBackPreFab, new Vector3( transform.position.x, transform.position.y + 0.1f, transform.position.z - 0.5f ), Quaternion.identity );
+
+                healthBarBackMade = true;
+            }
+            if( !healthBarFrontMade )
+            {
+                healthBarFrontObj = (GameObject)Instantiate( healthBarFrontPreFab, new Vector3( transform.position.x, transform.position.y + 0.1f, transform.position.z - 1.0f ), Quaternion.identity );
+                healthBarFrontMade = true;
+            }
+
+            if( healthBarBackObj )
+            {
+                healthBarBackObj.transform.position = new Vector3( transform.position.x, transform.position.y + 0.1f, transform.position.z - 0.5f );
+            }
+
+            if( healthBarFrontObj )
+            {
+                float healthPercent = (float)health / maxHealth;
+                healthBarFrontObj.transform.localScale = new Vector3( 0.2f * healthPercent, healthBarFrontObj.transform.localScale.y, healthBarFrontObj.transform.localScale.z );
+                healthBarFrontObj.transform.position = new Vector3( transform.position.x - 0.1f + ( 0.1f * healthPercent ), transform.position.y + 0.1f, transform.position.z - 1.0f );
+            }
         }
-
-
-
-
-
-
-
-
-
-
-
-
+        else
+        {
+            if( healthBarBackObj )
+            {
+                Destroy( healthBarBackObj );
+                healthBarBackMade = false;
+            }
+            if( healthBarFrontObj )
+            {
+                Destroy( healthBarFrontObj );
+                healthBarFrontMade = false;
+            }
+        }
 	}
 
     public void DropOffPower( int amount )
@@ -179,14 +207,4 @@ public class Enemy_Mothership : GenericEnemyScript {
             }
         }
     }
-
-    public override IEnumerator Die()
-    {
-        partSys.Play();
-
-        yield return new WaitForSeconds( 3f );
-
-        Destroy( gameObject );
-    }
-
 }
